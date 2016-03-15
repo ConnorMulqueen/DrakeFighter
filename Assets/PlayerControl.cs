@@ -42,13 +42,13 @@ public class PlayerControl : MonoBehaviour {
         if(col.tag == "Enemy") {
             if(hotlinePowerUp && hotlinePowerUpInitialTime + hotlinePowerUpLength > Time.time) {
                 Destroy(col.gameObject);
-                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Game>().addScore();
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Game>().addScore(1);
             }
             else {
                 aSources[2].Play();
                 hp -= 10f;
                 Debug.Log("health: " + hp);
-                playerRB.AddForce(Vector2.up * speed * 3400 * Time.deltaTime);
+                playerRB.AddForce(Vector2.up * speed * 2000 * Time.deltaTime);
                 if (hp == 0) {
                     aSources[3].Play();
                     GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Game>().EndGame();
@@ -69,7 +69,6 @@ public class PlayerControl : MonoBehaviour {
         }
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
             this.transform.Translate(Vector2.down * speed * Time.deltaTime);
-            facingRight = true;
         }
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
             this.transform.Translate(Vector2.right * speed * Time.deltaTime);
@@ -83,18 +82,18 @@ public class PlayerControl : MonoBehaviour {
         if(Input.GetKey(KeyCode.Space) && !punching) {
             Punch();
         }
-        if (Input.GetKey(KeyCode.X) && specialMeter == 100) {
+        if ((Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.LeftControl)) && specialMeter == 100) {
             Hotline();
         }
     }
     void Projectile() {
         GameObject proj = Instantiate(projectile) as GameObject;
         if (facingRight) {
-            proj.transform.position = playerRB.GetComponent<Rigidbody2D>().position + new Vector2(2, -1);
+            proj.transform.position = playerRB.GetComponent<Rigidbody2D>().position + new Vector2(1, -1);
             proj.GetComponent<Rigidbody2D>().AddForce(Vector2.right * speed * 9989 / 3 * Time.deltaTime);
         }
         else {
-            proj.transform.position = playerRB.GetComponent<Rigidbody2D>().position + new Vector2(-2, -1);
+            proj.transform.position = playerRB.GetComponent<Rigidbody2D>().position + new Vector2(-1, -1);
             proj.GetComponent<Rigidbody2D>().AddForce(Vector2.left * speed * 9989 / 3 * Time.deltaTime);
         }
 
@@ -117,9 +116,9 @@ public class PlayerControl : MonoBehaviour {
         hotlinePowerUp = true;
         hotlinePowerUpInitialTime = Time.time;
     }
-    public void addSpecial() {
+    public void addSpecial(float x) {
         if (specialMeter != 100f) {
-            specialMeter += 10f;
+            specialMeter += x;
         }
         if (specialMeter == 100f) {
             //press to hit em with hotline

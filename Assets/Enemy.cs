@@ -10,16 +10,19 @@ public class Enemy : MonoBehaviour {
     
 
     void OnTriggerEnter2D(Collider2D col) {
-        if(col.tag == "Projectile") {
+        if(col.tag == "BoxExterminator") {
+            Destroy(this.gameObject);
+        }
+        else if(col.tag == "Projectile") {
             hp -= 15;
             Destroy(col.gameObject);
         }
-        if(col.tag == "Map" || col.tag == "Enemy") {
+        else if(col.tag == "Map" || col.tag == "Enemy") {
             movementLeft = !movementLeft;
         }
         if (hp == 0) {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>().addSpecial();
-            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Game>().addScore();
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>().addSpecial(10f);
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Game>().addScore(1);
             Destroy(this.gameObject);
         }
     }
