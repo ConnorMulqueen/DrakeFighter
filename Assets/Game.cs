@@ -9,13 +9,13 @@ public class Game : MonoBehaviour {
         score = 0;
 	}
     void Update() {
-        if(Time.frameCount % 40 == 0) {
-            Vector2 position = new Vector2(Random.Range(-10.0F, 10.0F), Random.Range(-10.0F, 10.0F));
-            GameObject box = Instantiate(enemy, position, Quaternion.identity) as GameObject;
+        
+        if(Time.frameCount % Random.Range(100,105) == 0) { //Figure out something that makes the game progressively harder...
+            GameObject box = Instantiate(enemy, new Vector2(0, Random.Range(6, 8)), Quaternion.identity) as GameObject;
         }
     }
     public void addScore() {
-        score += 10;
+        score += 1;
     }
     public float getScore() {
         return score;

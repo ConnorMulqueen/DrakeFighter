@@ -33,12 +33,9 @@ public class PlayerControl : MonoBehaviour {
         if(!disablePlayer) {
             Movement();
             Abilities();
-            if(!facingRight) {
-                transform.localRotation = Quaternion.Euler(0, 180, 0);
-            }
-            else {
-                transform.localRotation = Quaternion.Euler(0, 0, 0);
-            }
+
+            //...Yeah I just really wanted to use the ternary operator because I never do...
+            transform.localRotation = facingRight ? Quaternion.Euler(0, 0, 0) : Quaternion.Euler(0, 180, 0);
         }
 	}
     void OnTriggerEnter2D(Collider2D col) {
@@ -62,7 +59,7 @@ public class PlayerControl : MonoBehaviour {
     void Movement() {
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
             if(Time.frameCount > canJump) {
-                playerRB.AddForce(Vector2.up * speed * 3400 * Time.deltaTime);
+                playerRB.AddForce(Vector2.up * speed * 8000 * Time.deltaTime);
                 canJump = Time.frameCount + 70;
             }
         }
@@ -93,12 +90,12 @@ public class PlayerControl : MonoBehaviour {
     void Projectile() {
         GameObject proj = Instantiate(projectile) as GameObject;
         if (facingRight) {
-            proj.transform.position = playerRB.GetComponent<Rigidbody2D>().position + new Vector2(2, 0);
-            proj.GetComponent<Rigidbody2D>().AddForce(Vector2.right * speed * 9989 / 4 * Time.deltaTime);
+            proj.transform.position = playerRB.GetComponent<Rigidbody2D>().position + new Vector2(2, -1);
+            proj.GetComponent<Rigidbody2D>().AddForce(Vector2.right * speed * 9989 / 3 * Time.deltaTime);
         }
         else {
-            proj.transform.position = playerRB.GetComponent<Rigidbody2D>().position + new Vector2(-2, 0);
-            proj.GetComponent<Rigidbody2D>().AddForce(Vector2.left * speed * 9989 / 4 * Time.deltaTime);
+            proj.transform.position = playerRB.GetComponent<Rigidbody2D>().position + new Vector2(-2, -1);
+            proj.GetComponent<Rigidbody2D>().AddForce(Vector2.left * speed * 9989 / 3 * Time.deltaTime);
         }
 
 
@@ -107,8 +104,8 @@ public class PlayerControl : MonoBehaviour {
        // disablePlayer = true;
         //disablePlayerInitialFrame = Time.frameCount;
         aSources[0].Play();
-        Object.Destroy(proj, 1.7f);
-        canProjectile = Time.frameCount + 40;
+        Object.Destroy(proj, 1.0f);
+        canProjectile = Time.frameCount + 35;
     }
     void Punch() {
         //stub
@@ -124,7 +121,9 @@ public class PlayerControl : MonoBehaviour {
         if (specialMeter != 100f) {
             specialMeter += 10f;
         }
-        Debug.Log("added special!");
+        if (specialMeter == 100f) {
+            //press to hit em with hotline
+        }
     }
     public float getHealth() {
         return hp;
