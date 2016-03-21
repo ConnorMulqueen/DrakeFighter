@@ -13,7 +13,8 @@ public class Game : MonoBehaviour {
         score = 0;
 	}
     void Update() {
-        if(Time.frameCount % Random.Range(100,105) == 0) { //Figure out something that makes the game randomly progressively harder...
+        // if(Time.frameCount % Random.Range(100,105) == 0) { //Figure out something that makes the game randomly progressively harder...
+        if(Time.frameCount % 100 == 0) {
             GameObject box = Instantiate(enemy, new Vector2(0, Random.Range(6, 8)), Quaternion.identity) as GameObject;
         }
         if(Time.frameCount % 200 == 0 && goldBoxOnMap == false) {
